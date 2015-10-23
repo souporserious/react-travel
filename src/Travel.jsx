@@ -35,12 +35,14 @@ class Travel extends Component {
     this._renderPortal(this.props)
   }
 
-  componentWillReceiveProps(nextProps) {
-    this._renderPortal(nextProps)
-  }
-
   shouldComponentUpdate(nextProps, nextState) {
-    return shallowCompare(this, nextProps, nextState)
+    const shouldUpdate = shallowCompare(this, nextProps, nextState)
+
+    if (shouldUpdate) {
+      this._renderPortal(nextProps)
+    }
+
+    return shouldUpdate
   }
 
   componentWillUnmount() {
@@ -52,11 +54,8 @@ class Travel extends Component {
   }
 
   _renderPortal(props) {
-    const { id, className, style, getNode } = this.props
+    const { id, className, style, getNode } = props
     const child = React.Children.only(props.children)
-    const component = ReactDOM.unstable_renderSubtreeIntoContainer(
-      this, child, this._portal
-    )
 
     // handle props passed into node
     if (id) {
@@ -71,6 +70,11 @@ class Travel extends Component {
         style
       )
     }
+
+    // render child into the portal
+    ReactDOM.unstable_renderSubtreeIntoContainer(
+      this, child, this._portal
+    )
 
     // we can't use traditional refs with portals
     // so we pass our newly created node back up
