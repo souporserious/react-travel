@@ -123,10 +123,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function componentDidMount() {
 	      var _props = this.props;
 	      var to = _props.to;
+	      var tag = _props.tag;
 	      var onMount = _props.onMount;
 
 	      var parent = typeof to === 'string' ? document.querySelector(to) : to;
-	      var portal = _reactDom2['default'].findDOMNode(this);
+	      var portal = document.createElement(tag);
 
 	      // render to desired location
 	      parent.appendChild(portal);
@@ -197,7 +198,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      return _react2['default'].createElement(this.props.tag);
+	      return null;
 	    }
 	  }], [{
 	    key: 'propTypes',
