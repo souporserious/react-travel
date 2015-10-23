@@ -4,7 +4,7 @@ Your subtree should be able to travel into another top-level tree.
 
 ## Props
 
-#### `to`: PropTypes.node
+#### `to`: PropTypes.any
 
 What node the portal is rendered to, defaults to `document.body`.
 

@@ -5,7 +5,7 @@ import CSSPropertyOperations from 'react/lib/CSSPropertyOperations'
 
 class Travel extends Component {
   static propTypes = {
-    to: PropTypes.node,
+    to: PropTypes.any,
     tag: PropTypes.string,
     id: PropTypes.string,
     className: PropTypes.any,
