@@ -1,13 +1,13 @@
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("React"), require("ReactDOM"), require("shallowCompare"));
+		module.exports = factory(require("React"), require("ReactDOM"), require("shallowCompare"), require("CSSPropertyOperations"));
 	else if(typeof define === 'function' && define.amd)
-		define(["React", "ReactDOM", "shallowCompare"], factory);
+		define(["React", "ReactDOM", "shallowCompare", "CSSPropertyOperations"], factory);
 	else if(typeof exports === 'object')
-		exports["Travel"] = factory(require("React"), require("ReactDOM"), require("shallowCompare"));
+		exports["Travel"] = factory(require("React"), require("ReactDOM"), require("shallowCompare"), require("CSSPropertyOperations"));
 	else
-		root["Travel"] = factory(root["React"], root["ReactDOM"], root["shallowCompare"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_4__) {
+		root["Travel"] = factory(root["React"], root["ReactDOM"], root["shallowCompare"], root["CSSPropertyOperations"]);
+})(this, function(__WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_4__, __WEBPACK_EXTERNAL_MODULE_5__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -101,6 +101,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _reactLibShallowCompare2 = _interopRequireDefault(_reactLibShallowCompare);
 
+	var _reactLibCSSPropertyOperations = __webpack_require__(5);
+
+	var _reactLibCSSPropertyOperations2 = _interopRequireDefault(_reactLibCSSPropertyOperations);
+
 	var Travel = (function (_Component) {
 	  _inherits(Travel, _Component);
 
@@ -111,8 +115,99 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	  _createClass(Travel, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      var _props = this.props;
+	      var tag = _props.tag;
+	      var to = _props.to;
+
+	      var parent = typeof to === 'string' ? document.querySelector(to) : to;
+	      var portal = document.createElement(tag);
+
+	      // render to desired location
+	      parent.appendChild(portal);
+
+	      // store portal to remove later
+	      this._portal = portal;
+
+	      // render children to portal
+	      this._renderPortal(this.props);
+	    }
+	  }, {
+	    key: 'shouldComponentUpdate',
+	    value: function shouldComponentUpdate(nextProps, nextState) {
+	      var shouldUpdate = (0, _reactLibShallowCompare2['default'])(this, nextProps, nextState);
+
+	      if (shouldUpdate) {
+	        this._renderPortal(nextProps);
+	      }
+
+	      return shouldUpdate;
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      // we have to unmount manually
+	      _reactDom2['default'].unmountComponentAtNode(this._portal);
+
+	      // clean up and remove the portal
+	      this._portal.parentNode.removeChild(this._portal);
+	    }
+	  }, {
+	    key: '_renderPortal',
+	    value: function _renderPortal(props) {
+	      var id = props.id;
+	      var className = props.className;
+	      var style = props.style;
+	      var getNode = props.getNode;
+
+	      var child = _react2['default'].Children.only(props.children);
+
+	      // handle props passed into node
+	      if (id) {
+	        this._portal.id = id;
+	      }
+	      if (className) {
+	        this._portal.className = className;
+	      }
+	      if (style) {
+	        _reactLibCSSPropertyOperations2['default'].setValueForStyles(this._portal, style);
+	      }
+
+	      // render child into the portal
+	      _reactDom2['default'].unstable_renderSubtreeIntoContainer(this, child, this._portal);
+
+	      // we can't use traditional refs with portals
+	      // so we pass our newly created node back up
+	      getNode(this._portal);
+	    }
+	  }, {
 	    key: 'render',
-	    value: function render() {}
+	    value: function render() {
+	      return null;
+	    }
+	  }], [{
+	    key: 'propTypes',
+	    value: {
+	      to: _react.PropTypes.node,
+	      tag: _react.PropTypes.string,
+	      id: _react.PropTypes.string,
+	      className: _react.PropTypes.any,
+	      style: _react.PropTypes.object,
+	      children: _react.PropTypes.element,
+	      getNode: _react.PropTypes.func
+	    },
+	    enumerable: true
+	  }, {
+	    key: 'defaultProps',
+	    value: {
+	      to: document.body,
+	      tag: 'div',
+	      getNode: function getNode() {
+	        return null;
+	      }
+	    },
+	    enumerable: true
 	  }]);
 
 	  return Travel;
@@ -138,6 +233,12 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports) {
 
 	module.exports = __WEBPACK_EXTERNAL_MODULE_4__;
+
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+	module.exports = __WEBPACK_EXTERNAL_MODULE_5__;
 
 /***/ }
 /******/ ])

@@ -1,11 +1,11 @@
 {
   "name": "react-travel",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "homepage": "https://github.com/souporserious/react-travel",
   "authors": [
     "Travis Arnold <ftntravis@gmail.com>"
   ],
-  "description": "Drop content anywhere on the page.",
+  "description": "Simple, unopinionated, React portal that renders it's subtree into a desired container.",
   "main": ["./dist/react-travel.js"],
   "keywords": [
     "react",

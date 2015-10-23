@@ -1,7 +1,7 @@
 {
   "name": "react-travel",
-  "version": "0.0.1",
-  "description": "Drop content anywhere on the page.",
+  "version": "1.0.0",
+  "description": "Simple, unopinionated, React portal that renders it's subtree into a desired container.",
   "main": "lib/react-travel.js",
   "scripts": {
     "build": "npm run build:lib && NODE_ENV=production webpack --config webpack.prod.config.js",

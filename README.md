@@ -1,6 +1,6 @@
 ## React Travel 1.0.0
 
-Simple, unopinionated, React portal that renders it's subtree into a desired container.
+Your subtree should be able to travel into another top-level tree.
 
 ## Props
 
