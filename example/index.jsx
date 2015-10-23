@@ -1,21 +1,26 @@
 import React, { Component, Children, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import Travel from '../src/react-travel'
+import $ from 'jquery'
+import 'jquery-ui'
 
 import './main.scss'
 
 class App extends Component {
   state = {
-    toggle: false
+    toggleText: false,
+    dialogOpen: false
   }
 
   render() {
-    const { toggle } = this.state
+    const { toggleText, dialogOpen } = this.state
 
     return(
       <div id="travel-origin">
         <button
-          onClick={() => this.setState({toggle: !this.state.toggle})}
+          onClick={() =>
+            this.setState({toggleText: !this.state.toggleText})
+          }
         >
           Toggle Text
         </button>
@@ -25,16 +30,50 @@ class App extends Component {
           className="great-scott"
           style={{
             padding: 12,
-            color: toggle ? '#fff' : '#000',
-            background: toggle ? 'blue' : 'yellow'
+            color: toggleText ? '#fff' : '#000',
+            background: toggleText ? 'blue' : 'yellow'
           }}
-          getNode={node => console.log(node)}
         >
           <div ref="cool">
             <div>Where we're going</div>
             {
-              toggle &&
+              toggleText &&
               <div>We don't need roads</div>
+            }
+          </div>
+        </Travel>
+
+        <button
+          onClick={() =>
+            this.setState({dialogOpen: !this.state.dialogOpen})
+          }
+        >
+          Toggle Dialog
+        </button>
+        <Travel
+          onMount={node => {
+            return(
+              $(node).dialog({
+                autoOpen: false,
+                close: () => {
+                  this.setState({dialogOpen: false})
+                }
+              }).data('ui-dialog')
+            )
+          }}
+          onUpdate={dialog => {
+            if(dialogOpen) {
+              dialog.open()
+            } else {
+              dialog.close()
+            }
+          }}
+        >
+          <div>
+            Even Works With Dialogs
+            {
+              toggleText &&
+              <div>How neat is that!</div>
             }
           </div>
         </Travel>
