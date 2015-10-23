@@ -1,6 +1,33 @@
-## React Travel 1.0.0
+## React Travel 1.1.0
 
 Your subtree should be able to travel into another top-level tree.
+
+## Example
+```js
+<Travel
+  onMount={node => {
+    return(
+      $(node).dialog({
+        autoOpen: false,
+        close: () => {
+          this.setState({dialogOpen: false})
+        }
+      }).data('ui-dialog')
+    )
+  }}
+  onUpdate={dialog => {
+    if(dialogOpen) {
+      dialog.open()
+    } else {
+      dialog.close()
+    }
+  }}
+>
+  <div>
+    Even works with third party dialogs!
+  </div>
+</Travel>
+```
 
 ## Props
 
@@ -26,8 +53,10 @@ React style prop. Accepts an object of styles that are applied to the portal.
 
 #### `children`: PropTypes.element
 
-Accepts a single React element or component
+Accepts a single React element or component.
 
-#### `getNode`: PropTypes.func
+#### `onMount`: PropTypes.func
+#### `onUpdate`: PropTypes.func
+#### `onUnmount`: PropTypes.func
 
-Since we can't use traditional refs, use this to get a reference to the portal node.
+All tie into React's life cycle methods. Returns portal node with any work done to it.
