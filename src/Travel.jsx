@@ -27,9 +27,9 @@ class Travel extends Component {
   }
 
   componentDidMount() {
-    const { to, onMount } = this.props
-    const parent = typeof to === 'string' ? document.querySelector(to) : to
-    const portal = ReactDOM.findDOMNode(this)
+    const { to, tag, onMount } = this.props
+    const parent = (typeof to === 'string') ? document.querySelector(to) : to
+    const portal = document.createElement(tag)
 
     // render to desired location
     parent.appendChild(portal)
@@ -95,7 +95,7 @@ class Travel extends Component {
   }
 
   render() {
-    return React.createElement(this.props.tag)
+    return null
   }
 }
 

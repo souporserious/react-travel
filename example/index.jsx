@@ -42,6 +42,12 @@ class App extends Component {
             }
           </div>
         </Travel>
+        {
+          toggleText &&
+          <Travel>
+            <div>Toggled Travel</div>
+          </Travel>
+        }
 
         <button
           onClick={() =>
