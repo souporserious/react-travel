@@ -22,12 +22,13 @@ class App extends Component {
         <Travel
           to="#the-future"
           id="delorean"
-          className={"great-scott"}
+          className="great-scott"
           style={{
             padding: 12,
-            background: 'yellow'
+            color: toggle ? '#fff' : '#000',
+            background: toggle ? 'blue' : 'yellow'
           }}
-          getNode={c => console.log(c)}
+          getNode={node => console.log(node)}
         >
           <div ref="cool">
             <div>Where we're going</div>
