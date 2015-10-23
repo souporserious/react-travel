@@ -1,32 +1,32 @@
 import React, { Component, Children, PropTypes, createElement, cloneElement } from 'react'
 import ReactDOM from 'react-dom'
 import shallowCompare from 'react/lib/shallowCompare'
-
-const noop = () => null
+import CSSPropertyOperations from 'react/lib/CSSPropertyOperations'
 
 class Travel extends Component {
   static propTypes = {
-    renderTo: PropTypes.any,
-    getRef: PropTypes.func,
-    onMount: PropTypes.func
+    to: PropTypes.node,
+    tag: PropTypes.string,
+    id: PropTypes.string,
+    className: PropTypes.any,
+    style: PropTypes.object,
+    children: PropTypes.element,
+    getNode: PropTypes.func
   }
 
   static defaultProps = {
-    renderTo: document.body,
-    getRef: noop,
-    onMount: noop
+    to: document.body,
+    tag: 'div',
+    getNode: () => null
   }
 
   componentDidMount() {
-    const { renderTo } = this.props
-    const portal = document.createElement('div')
+    const { tag, to } = this.props
+    const parent = typeof to === 'string' ? document.querySelector(to) : to
+    const portal = document.createElement(tag)
 
     // render to desired location
-    if(!renderTo) {
-      document.body.appendChild(portal)
-    } else {
-      renderTo.appendChild(portal)
-    }
+    parent.appendChild(portal)
 
     // store portal to remove later
     this._portal = portal
@@ -39,31 +39,42 @@ class Travel extends Component {
     this._renderPortal(nextProps)
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return shallowCompare(this, nextProps, nextState)
+  }
+
   componentWillUnmount() {
+    // we have to unmount manually
     ReactDOM.unmountComponentAtNode(this._portal)
+
+    // clean up and remove the portal
     this._portal.parentNode.removeChild(this._portal)
   }
 
   _renderPortal(props) {
-    const { className, style, getRef, onMount } = this.props
+    const { id, className, style, getNode } = this.props
     const child = React.Children.only(props.children)
     const component = ReactDOM.unstable_renderSubtreeIntoContainer(
-      this, child, this._portal, onMount
+      this, child, this._portal
     )
 
-    // take care of any classes or styles passed in
-    if(className) {
+    // handle props passed into node
+    if (id) {
+      this._portal.id = id
+    }
+    if (className) {
       this._portal.className = className
     }
-    if(style) {
-      Object.keys(style).forEach(prop =>
-        this._portal.style[prop] = style[prop]
+    if (style) {
+      CSSPropertyOperations.setValueForStyles(
+        this._portal,
+        style
       )
     }
 
     // we can't use traditional refs with portals
-    // so we pass our newly created ref back up
-    getRef(component)
+    // so we pass our newly created node back up
+    getNode(this._portal)
   }
 
   render() {
