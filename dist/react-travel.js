@@ -1,13 +1,13 @@
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("React"), require("ReactDOM"), require("shallowCompare"), require("CSSPropertyOperations"));
+		module.exports = factory(require("React"), require("ReactDOM"));
 	else if(typeof define === 'function' && define.amd)
-		define(["React", "ReactDOM", "shallowCompare", "CSSPropertyOperations"], factory);
+		define(["React", "ReactDOM"], factory);
 	else if(typeof exports === 'object')
-		exports["Travel"] = factory(require("React"), require("ReactDOM"), require("shallowCompare"), require("CSSPropertyOperations"));
+		exports["Travel"] = factory(require("React"), require("ReactDOM"));
 	else
-		root["Travel"] = factory(root["React"], root["ReactDOM"], root["shallowCompare"], root["CSSPropertyOperations"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_4__, __WEBPACK_EXTERNAL_MODULE_5__) {
+		root["Travel"] = factory(root["React"], root["ReactDOM"]);
+})(this, function(__WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_3__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -97,13 +97,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _reactLibShallowCompare = __webpack_require__(4);
+	var _reactAddonsShallowCompare = __webpack_require__(4);
 
-	var _reactLibShallowCompare2 = _interopRequireDefault(_reactLibShallowCompare);
-
-	var _reactLibCSSPropertyOperations = __webpack_require__(5);
-
-	var _reactLibCSSPropertyOperations2 = _interopRequireDefault(_reactLibCSSPropertyOperations);
+	var _reactAddonsShallowCompare2 = _interopRequireDefault(_reactAddonsShallowCompare);
 
 	var noopProp = function noopProp(func) {
 	  return func;
@@ -142,15 +138,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this._renderPortal(this.props, true);
 	    }
 	  }, {
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(nextProps) {
+	      this._renderPortal(nextProps);
+	    }
+	  }, {
 	    key: 'shouldComponentUpdate',
 	    value: function shouldComponentUpdate(nextProps, nextState) {
-	      var shouldUpdate = (0, _reactLibShallowCompare2['default'])(this, nextProps, nextState);
-
-	      if (shouldUpdate) {
-	        this._renderPortal(nextProps);
-	      }
-
-	      return shouldUpdate;
+	      return (0, _reactAddonsShallowCompare2['default'])(this, nextProps, nextState);
 	    }
 	  }, {
 	    key: 'componentWillUnmount',
@@ -165,8 +160,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this._portal.parentNode.removeChild(this._portal);
 	    }
 	  }, {
+	    key: 'getNode',
+	    value: function getNode() {
+	      return this._portal;
+	    }
+	  }, {
 	    key: '_renderPortal',
 	    value: function _renderPortal(props) {
+	      var _this = this;
+
 	      var onMount = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
 	      var id = props.id;
 	      var className = props.className;
@@ -184,16 +186,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this._portal.className = className;
 	      }
 	      if (style) {
-	        _reactLibCSSPropertyOperations2['default'].setValueForStyles(this._portal, style);
+	        Object.keys(style).forEach(function (prop) {
+	          return _this._portal.style[prop] = style[prop];
+	        });
 	      }
 
 	      // render child into the portal
-	      _reactDom2['default'].unstable_renderSubtreeIntoContainer(this, child, this._portal);
+	      var component = _reactDom2['default'].unstable_renderSubtreeIntoContainer(this, child, this._portal, function () {
+	        // assign new node if updated
+	        if (!onMount) {
+	          _this._node = onUpdate(_this._node) || _this._node;
+	        }
 
-	      // assign new node if updated
-	      if (!onMount) {
-	        this._node = onUpdate(this._node) || this._node;
-	      }
+	        // pass node back up if needed for DOM calculations
+	        getNode(_this._portal);
+	      });
 	    }
 	  }, {
 	    key: 'render',
@@ -209,6 +216,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      className: _react.PropTypes.any,
 	      style: _react.PropTypes.object,
 	      children: _react.PropTypes.element,
+	      getNode: _react.PropTypes.func,
 	      onMount: _react.PropTypes.func,
 	      onUpdate: _react.PropTypes.func,
 	      onUnmount: _react.PropTypes.func
@@ -219,6 +227,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: {
 	      to: document.body,
 	      tag: 'div',
+	      getNode: noopProp,
 	      onMount: noopProp,
 	      onUpdate: noopProp,
 	      onUnmount: noopProp
@@ -246,15 +255,95 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 4 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __WEBPACK_EXTERNAL_MODULE_4__;
+	'use strict';
+
+	module.exports = __webpack_require__(5);
 
 /***/ },
 /* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright 2013-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	* @providesModule shallowCompare
+	*/
+
+	'use strict';
+
+	var shallowEqual = __webpack_require__(6);
+
+	/**
+	 * Does a shallow comparison for props and state.
+	 * See ReactComponentWithPureRenderMixin
+	 */
+	function shallowCompare(instance, nextProps, nextState) {
+	  return !shallowEqual(instance.props, nextProps) || !shallowEqual(instance.state, nextState);
+	}
+
+	module.exports = shallowCompare;
+
+/***/ },
+/* 6 */
 /***/ function(module, exports) {
 
-	module.exports = __WEBPACK_EXTERNAL_MODULE_5__;
+	/**
+	 * Copyright 2013-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule shallowEqual
+	 * @typechecks
+	 * 
+	 */
+
+	'use strict';
+
+	var hasOwnProperty = Object.prototype.hasOwnProperty;
+
+	/**
+	 * Performs equality by iterating through keys on an object and returning false
+	 * when any key has values which are not strictly equal between the arguments.
+	 * Returns true when the values of all keys are strictly equal.
+	 */
+	function shallowEqual(objA, objB) {
+	  if (objA === objB) {
+	    return true;
+	  }
+
+	  if (typeof objA !== 'object' || objA === null || typeof objB !== 'object' || objB === null) {
+	    return false;
+	  }
+
+	  var keysA = Object.keys(objA);
+	  var keysB = Object.keys(objB);
+
+	  if (keysA.length !== keysB.length) {
+	    return false;
+	  }
+
+	  // Test for A's keys different from B.
+	  var bHasOwnProperty = hasOwnProperty.bind(objB);
+	  for (var i = 0; i < keysA.length; i++) {
+	    if (!bHasOwnProperty(keysA[i]) || objA[keysA[i]] !== objB[keysA[i]]) {
+	      return false;
+	    }
+	  }
+
+	  return true;
+	}
+
+	module.exports = shallowEqual;
 
 /***/ }
 /******/ ])

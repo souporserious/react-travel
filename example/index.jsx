@@ -12,6 +12,10 @@ class App extends Component {
     dialogOpen: false
   }
 
+  componentDidMount() {
+
+  }
+
   render() {
     const { toggleText, dialogOpen } = this.state
 

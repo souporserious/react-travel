@@ -1,4 +1,4 @@
-## React Travel 1.1.1
+## React Travel 1.1.2
 
 Your subtree should be able to travel into another top-level tree.
 
@@ -49,7 +49,7 @@ React className prop.
 
 #### `style`: PropTypes.object
 
-React style prop. Accepts an object of styles that are applied to the portal.
+React style prop. Accepts an object of styles that are applied to the portal. Note that values require their respective unit applied i.e `style={{padding: '12px'}}`.
 
 #### `children`: PropTypes.element
 
