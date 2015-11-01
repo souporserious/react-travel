@@ -27,9 +27,10 @@
     "url": "https://github.com/souporserious/react-travel/issues"
   },
   "homepage": "https://github.com/souporserious/react-travel",
-  "peerDependencies": {
-    "react": "^0.14.0",
-    "react-dom": "^0.14.0"
+  "dependencies": {
+    "react": "^0.14.1",
+    "react-addons-shallow-compare": "^0.14.1",
+    "react-dom": "^0.14.1"
   },
   "devDependencies": {
     "autoprefixer-loader": "^2.0.0",
