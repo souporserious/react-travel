@@ -1,106 +1,123 @@
 import React, { Component, Children, PropTypes, createElement, cloneElement } from 'react'
 import ReactDOM from 'react-dom'
-import shallowCompare from 'react-addons-shallow-compare'
 
-const noopProp = func => func
+const noop = () => null
 
 class Travel extends Component {
   static propTypes = {
-    to: PropTypes.any,
-    tag: PropTypes.string,
+    renderTag: PropTypes.string,
+    renderTo: PropTypes.any,
     id: PropTypes.string,
     className: PropTypes.any,
     style: PropTypes.object,
-    children: PropTypes.element,
-    getNode: PropTypes.func,
     onMount: PropTypes.func,
     onUpdate: PropTypes.func,
     onUnmount: PropTypes.func
   }
 
   static defaultProps = {
-    to: document.body,
-    tag: 'div',
-    getNode: noopProp,
-    onMount: noopProp,
-    onUpdate: noopProp,
-    onUnmount: noopProp
+    renderTag: 'div',
+    renderTo: null,
+    onMount: noop,
+    onUpdate: noop,
+    onUnmount: noop
   }
+
+  _portalNode = null
 
   componentDidMount() {
-    const { to, tag, onMount } = this.props
-    const parent = (typeof to === 'string') ? document.querySelector(to) : to
-    const portal = document.createElement(tag)
-
-    // render to desired location
-    parent.appendChild(portal)
-
-    // store the node to allow work to be done on it
-    this._node = onMount(portal) || portal
-
-    // store portal to remove later
-    this._portal = portal
-
-    // render children to portal
-    this._renderPortal(this.props, true)
+    this._setupPortal()
+    this._renderPortal()
   }
 
-  componentWillReceiveProps(nextProps) {
-    this._renderPortal(nextProps)
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    return shallowCompare(this, nextProps, nextState)
+  componentDidUpdate() {
+    this._renderPortal()
   }
 
   componentWillUnmount() {
-    // we have to unmount manually
-    ReactDOM.unmountComponentAtNode(this._portal)
-
-    // allow cleanup of any DOM work done by user
-    this.props.onUnmount(this._node)
-
-    // clean up and remove the portal
-    this._portal.parentNode.removeChild(this._portal)
+    this._destroyPortal()
   }
 
-  getNode() {
-    return this._portal
+  _getRenderToNode() {
+    const { renderTo } = this.props
+    if (typeof renderTo === 'string') {
+      return document.querySelector(renderTo)
+    } else {
+      return renderTo || document.body
+    }
   }
 
-  _renderPortal(props, onMount = false) {
-    const { id, className, style, onUpdate, getNode } = props
-    const child = React.Children.only(props.children)
-
-    // handle props passed into node
-    if (id) {
-      this._portal.id = id
+  _getComponent() {
+    if (Children.count(this.props.children) === 1) {
+      return Children.only(this.props.children)
+    } else {
+      return Children.toArray(this.props.children)[1]
     }
-    if (className) {
-      this._portal.className = className
-    }
-    if (style) {
-      Object.keys(style).forEach(prop =>
-        this._portal.style[prop] = style[prop]
-      )
-    }
+  }
 
-    // render child into the portal
-    const component = ReactDOM.unstable_renderSubtreeIntoContainer(
-      this, child, this._portal, () => {
-        // assign new node if updated
-        if(!onMount) {
-          this._node = onUpdate(this._node) || this._node
-        }
+  _setupPortal() {
+    const { renderTag, onMount } = this.props
+    const renderToNode = this._getRenderToNode()
 
-        // pass node back up if needed for DOM calculations
-        getNode(this._portal)
+    // create a node that we can stick our component in
+    this._portalNode = document.createElement(renderTag)
+
+    // append node to the render node
+    renderToNode.appendChild(this._portalNode)
+
+    // store the instance passed back to allow work to be done on it
+    this._portalInstance = (typeof onMount === 'function')
+      ? onMount(this._portalNode)
+      : this._portalNode
+  }
+
+  _renderPortal() {
+    const component = this._getComponent()
+    // render component into the DOM
+    ReactDOM.unstable_renderSubtreeIntoContainer(
+      this, component, this._portalNode, () => {
+        // don't update until the subtree has finished rendering
+        this._updatePortal()
       }
     )
   }
 
+  _updatePortal() {
+    const { id, className, style, onUpdate } = this.props
+
+    if (id) {
+      this._portalNode.id = id
+    }
+
+    if (className) {
+      this._portalNode.className = className
+    }
+
+    if (style) {
+      Object.keys(style).forEach(key => {
+        this._portalNode.style[key] = style[key]
+      })
+    }
+
+    if (typeof onUpdate === 'function') {
+      this._portalInstance = onUpdate(this._portalInstance)
+    }
+  }
+
+  _destroyPortal() {
+    if (this._portalNode) {
+      ReactDOM.unmountComponentAtNode(this._portalNode)
+      this._portalNode.parentNode.removeChild(this._portalNode)
+    }
+    this._portalNode = null
+  }
+
   render() {
-    return null
+    if (Children.count(this.props.children) === 1) {
+      return null
+    } else {
+      return Children.toArray(this.props.children)[0]
+    }
   }
 }
 
