@@ -113,7 +113,7 @@ class Travel extends Component {
   }
 
   render() {
-    return Children.only(this.props.children)
+    return null
   }
 }
 
