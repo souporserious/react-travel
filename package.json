@@ -1,8 +1,12 @@
 {
   "name": "react-travel",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Simple, unopinionated, React portal that renders it's subtree into a desired container.",
   "main": "lib/react-travel.js",
+  "files": [
+    "dist",
+    "lib"
+  ],
   "scripts": {
     "build:lib": "babel src --out-dir lib",
     "build": "npm run build:lib && NODE_ENV=production webpack --config webpack.prod.config.js",
