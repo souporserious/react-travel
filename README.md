@@ -1,4 +1,4 @@
-## React Travel 1.1.2
+## React Travel 1.2.0
 
 Your subtree should be able to travel into another top-level tree.
 
