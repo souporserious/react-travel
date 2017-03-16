@@ -1,4 +1,7 @@
-## React Travel 1.2.0
+## React Travel
+
+[![npm version](https://badge.fury.io/js/react-travel.svg)](https://badge.fury.io/js/react-travel)
+[![Dependency Status](https://david-dm.org/souporserious/react-travel.svg)](https://david-dm.org/souporserious/react-travel)
 
 Your subtree should be able to travel into another top-level tree.
 
