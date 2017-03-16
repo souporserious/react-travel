@@ -27,7 +27,7 @@ var config = {
     publicPath: 'dist/',
     filename: 'react-travel.js',
     sourceMapFilename: 'react-travel.sourcemap.js',
-    library: 'ReactTravel',
+    library: 'Portal',
     libraryTarget: 'umd'
   },
   module: {

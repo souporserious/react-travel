@@ -1,6 +1,6 @@
 {
   "name": "react-travel",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "Simple, unopinionated, React portal that renders it's subtree into a desired container.",
   "main": "lib/react-travel.js",
   "files": [
