@@ -1,4 +1,5 @@
-import React, { Component, Children, PropTypes, createElement, cloneElement } from 'react'
+import React, { Component, Children, createElement, cloneElement } from 'react'
+import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 
 const noop = () => null
