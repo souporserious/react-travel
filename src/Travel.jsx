@@ -1,4 +1,5 @@
-import React, { Component, Children, PropTypes, createElement, cloneElement } from 'react'
+import React, { Component, Children, createElement, cloneElement } from 'react'
+import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 
 const noop = () => null
@@ -12,7 +13,7 @@ class Travel extends Component {
     style: PropTypes.object,
     onMount: PropTypes.func,
     onUpdate: PropTypes.func,
-    onUnmount: PropTypes.func
+    onUnmount: PropTypes.func,
   }
 
   static defaultProps = {
@@ -20,7 +21,7 @@ class Travel extends Component {
     renderTo: null,
     onMount: noop,
     onUpdate: noop,
-    onUnmount: noop
+    onUnmount: noop,
   }
 
   _portalNode = null
@@ -66,7 +67,7 @@ class Travel extends Component {
     renderToNode.appendChild(this._portalNode)
 
     // store the instance passed back to allow work to be done on it
-    this._portalInstance = (typeof onMount === 'function')
+    this._portalInstance = typeof onMount === 'function'
       ? onMount(this._portalNode)
       : this._portalNode
   }
@@ -75,7 +76,10 @@ class Travel extends Component {
     const component = this._getComponent()
     // render component into the DOM
     ReactDOM.unstable_renderSubtreeIntoContainer(
-      this, component, this._portalNode, () => {
+      this,
+      component,
+      this._portalNode,
+      () => {
         // don't update until the subtree has finished rendering
         this._updatePortal()
       }
