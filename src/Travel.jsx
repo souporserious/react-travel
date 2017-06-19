@@ -11,6 +11,7 @@ class Travel extends Component {
     id: PropTypes.string,
     className: PropTypes.any,
     style: PropTypes.object,
+    useArray: PropTypes.bool,
     onMount: PropTypes.func,
     onUpdate: PropTypes.func,
     onUnmount: PropTypes.func,
@@ -49,10 +50,10 @@ class Travel extends Component {
   }
 
   _getComponent() {
-    if (Children.count(this.props.children) === 1) {
-      return Children.only(this.props.children)
-    } else {
+    if (this.props.useArray) {
       return Children.toArray(this.props.children)[1]
+    } else {
+      return Children.only(this.props.children)
     }
   }
 
@@ -74,6 +75,10 @@ class Travel extends Component {
 
   _renderPortal() {
     const component = this._getComponent()
+
+    // if no component, bail out
+    if (!component) return
+
     // render component into the DOM
     ReactDOM.unstable_renderSubtreeIntoContainer(
       this,
@@ -117,10 +122,10 @@ class Travel extends Component {
   }
 
   render() {
-    if (Children.count(this.props.children) === 1) {
-      return null
-    } else {
+    if (this.props.useArray) {
       return Children.toArray(this.props.children)[0]
+    } else {
+      return null
     }
   }
 }

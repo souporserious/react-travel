@@ -71,7 +71,7 @@ class App extends Component {
             <div>Toggled Travel</div>
           </Travel>}
 
-        <Travel>
+        <Travel useArray>
           <div>Trigger</div>
           <div>Content</div>
         </Travel>
