@@ -7,7 +7,7 @@ import './main.scss'
 
 class Popover extends Component {
   state = {
-    isOpen: false
+    isOpen: false,
   }
 
   render() {
@@ -24,13 +24,12 @@ class Popover extends Component {
           <AriaToggle className="popover-toggle">
             Toggle Popover <span>👻</span>
           </AriaToggle>
-          { isOpen &&
+          {isOpen &&
             <Travel>
               <AriaPopover>
                 Some cool popover content.
               </AriaPopover>
-            </Travel>
-          }
+            </Travel>}
           <div>
             Popover is {isOpen ? 'Open' : 'Closed'}
           </div>
@@ -39,20 +38,16 @@ class Popover extends Component {
     )
   }
 }
-
 class App extends Component {
   state = {
-    toggleText: false
+    toggleText: false,
   }
-
   render() {
     const { toggleText, dialogOpen } = this.state
     return (
       <div id="travel-origin">
         <button
-          onClick={() =>
-            this.setState({toggleText: !this.state.toggleText})
-          }
+          onClick={() => this.setState({ toggleText: !this.state.toggleText })}
         >
           Toggle Text
         </button>
@@ -63,26 +58,27 @@ class App extends Component {
           style={{
             padding: 12,
             color: toggleText ? '#fff' : '#000',
-            background: toggleText ? 'blue' : 'yellow'
+            background: toggleText ? 'blue' : 'yellow',
           }}
         >
           <div>
             <div>Where we're going</div>
-            { toggleText &&
-              <div>We don't need roads</div>
-            }
+            {toggleText && <div>We don't need roads</div>}
           </div>
         </Travel>
-        { toggleText &&
+        {toggleText &&
           <Travel>
             <div>Toggled Travel</div>
-          </Travel>
-        }
+          </Travel>}
 
-        <Popover/>
+        <Travel>
+          <div>Trigger</div>
+          <div>Content</div>
+        </Travel>
+
+        <Popover />
       </div>
     )
   }
 }
-
 ReactDOM.render(<App />, document.getElementById('app'))

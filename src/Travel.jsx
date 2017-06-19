@@ -117,7 +117,11 @@ class Travel extends Component {
   }
 
   render() {
-    return null
+    if (Children.count(this.props.children) === 1) {
+      return null
+    } else {
+      return Children.toArray(this.props.children)[0]
+    }
   }
 }
 
