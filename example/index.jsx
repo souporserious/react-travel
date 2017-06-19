@@ -38,6 +38,28 @@ class Popover extends Component {
     )
   }
 }
+class Dropdown extends Component {
+  state = { isOpen: false }
+  toggle = () => {
+    this.setState(state => ({
+      isOpen: !state.isOpen,
+    }))
+  }
+  render() {
+    const { label, children } = this.props
+    return (
+      <Travel useArray>
+        <button onClick={this.toggle}>
+          {label}
+        </button>
+        {this.state.isOpen &&
+          <div>
+            {children}
+          </div>}
+      </Travel>
+    )
+  }
+}
 class App extends Component {
   state = {
     toggleText: false,
@@ -71,10 +93,9 @@ class App extends Component {
             <div>Toggled Travel</div>
           </Travel>}
 
-        <Travel useArray>
-          <div>Trigger</div>
-          <div>Content</div>
-        </Travel>
+        <Dropdown label="Trigger">
+          Content
+        </Dropdown>
 
         <Popover />
       </div>

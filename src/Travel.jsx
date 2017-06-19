@@ -28,7 +28,6 @@ class Travel extends Component {
   _portalNode = null
 
   componentDidMount() {
-    this._setupPortal()
     this._renderPortal()
   }
 
@@ -77,7 +76,15 @@ class Travel extends Component {
     const component = this._getComponent()
 
     // if no component, bail out
-    if (!component) return
+    if (!component) {
+      this._destroyPortal()
+      return
+    }
+
+    // if no portalNode found, create it
+    if (!this._portalNode) {
+      this._setupPortal()
+    }
 
     // render component into the DOM
     ReactDOM.unstable_renderSubtreeIntoContainer(
