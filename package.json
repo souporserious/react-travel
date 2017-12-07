@@ -35,8 +35,8 @@
   },
   "homepage": "https://github.com/souporserious/react-travel",
   "peerDependencies": {
-    "react": "0.14.x || ^15.0.0",
-    "react-dom": "0.14.x || ^15.0.0"
+    "react": "0.14.x || ^15.0.0 || ^16.0.0",
+    "react-dom": "0.14.x || ^15.0.0 || ^16.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.16.0",
@@ -53,15 +53,15 @@
     "node-libs-browser": "^1.0.0",
     "node-sass": "^3.2.0",
     "postcss-loader": "^0.13.0",
-    "react": "15.3.2",
+    "react": "16.2.0",
     "react-aria": "^0.4.0",
-    "react-dom": "15.3.2",
+    "react-dom": "16.2.0",
     "sass-loader": "^4.0.2",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.2",
     "webpack-dev-server": "^1.9.0"
   },
   "dependencies": {
-    "prop-types": "^15.5.10"
+    "prop-types": "^15.6.0"
   }
 }

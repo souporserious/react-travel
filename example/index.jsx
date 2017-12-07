@@ -1,6 +1,9 @@
-import React, { Component, Children, PropTypes } from 'react'
+import React, { Component, Children } from 'react'
+import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom'
-import { AriaManager, AriaToggle, AriaPopover } from 'react-aria'
+// TODO: Uncomment once react-aria has been updated to support React 16
+// import { AriaManager, AriaToggle, AriaPopover } from 'react-aria'
+
 import Travel from '../src/react-travel'
 
 import './main.scss'
@@ -11,31 +14,34 @@ class Popover extends Component {
   }
 
   render() {
+    return null;
     const { isOpen } = this.state
-    return (
-      <AriaManager
-        type="popover"
-        onPopoverOpen={() => this.setState({ isOpen: true })}
-        onPopoverClose={() => this.setState({ isOpen: false })}
-        openPopoverOn="hover"
-      >
-        <div>
-          <h3>Popover</h3>
-          <AriaToggle className="popover-toggle">
-            Toggle Popover <span>👻</span>
-          </AriaToggle>
-          {isOpen &&
-            <Travel>
-              <AriaPopover>
-                Some cool popover content.
-              </AriaPopover>
-            </Travel>}
-          <div>
-            Popover is {isOpen ? 'Open' : 'Closed'}
-          </div>
-        </div>
-      </AriaManager>
-    )
+    return null;
+    // TODO: Uncomment once react-aria has been updated to support React 16
+    // return (
+    //   <AriaManager
+    //     type="popover"
+    //     onPopoverOpen={() => this.setState({ isOpen: true })}
+    //     onPopoverClose={() => this.setState({ isOpen: false })}
+    //     openPopoverOn="hover"
+    //   >
+    //     <div>
+    //       <h3>Popover</h3>
+    //       <AriaToggle className="popover-toggle">
+    //         Toggle Popover <span>👻</span>
+    //       </AriaToggle>
+    //       {isOpen &&
+    //         <Travel>
+    //           <AriaPopover>
+    //             Some cool popover content.
+    //           </AriaPopover>
+    //         </Travel>}
+    //       <div>
+    //         Popover is {isOpen ? 'Open' : 'Closed'}
+    //       </div>
+    //     </div>
+    //   </AriaManager>
+    // )
   }
 }
 class Dropdown extends Component {
